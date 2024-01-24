@@ -5,8 +5,6 @@ import com.example.springsocial.payload.Response;
 import com.example.springsocial.payload.class_payload.ClassDTO;
 import com.example.springsocial.service.ClassService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

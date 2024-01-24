@@ -2,6 +2,7 @@ package com.example.springsocial.security;
 
 import com.example.springsocial.config.AppProperties;
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -12,15 +13,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class TokenProvider {
-
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
-
     private final AppProperties appProperties;
 
-    public TokenProvider(AppProperties appProperties) {
-        this.appProperties = appProperties;
-    }
 
     public String createToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
