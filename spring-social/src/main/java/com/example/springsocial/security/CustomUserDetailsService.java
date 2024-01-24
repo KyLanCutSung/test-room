@@ -2,7 +2,7 @@ package com.example.springsocial.security;
 
 
 import com.example.springsocial.exception.ResourceNotFoundException;
-import com.example.springsocial.model.User;
+import com.example.springsocial.model.users.User;
 import com.example.springsocial.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

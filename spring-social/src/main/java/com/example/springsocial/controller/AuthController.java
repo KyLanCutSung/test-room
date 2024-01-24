@@ -1,12 +1,12 @@
 package com.example.springsocial.controller;
 
 import com.example.springsocial.exception.BadRequestException;
-import com.example.springsocial.model.AuthProvider;
-import com.example.springsocial.model.User;
-import com.example.springsocial.payload.ApiResponse;
-import com.example.springsocial.payload.AuthResponse;
-import com.example.springsocial.payload.LoginRequest;
-import com.example.springsocial.payload.SignUpRequest;
+import com.example.springsocial.model.users.AuthProvider;
+import com.example.springsocial.model.users.User;
+import com.example.springsocial.payload.auth_payload.ApiResponse;
+import com.example.springsocial.payload.auth_payload.AuthResponse;
+import com.example.springsocial.payload.auth_payload.LoginRequest;
+import com.example.springsocial.payload.auth_payload.SignUpRequest;
 import com.example.springsocial.repository.UserRepository;
 import com.example.springsocial.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;

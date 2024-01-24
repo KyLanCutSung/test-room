@@ -1,4 +1,4 @@
-package com.example.springsocial.model;
+package com.example.springsocial.model.users;
 
 public enum  AuthProvider {
     local,
