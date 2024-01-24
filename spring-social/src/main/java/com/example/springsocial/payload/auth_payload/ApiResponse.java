@@ -1,4 +1,4 @@
-package com.example.springsocial.payload;
+package com.example.springsocial.payload.auth_payload;
 
 public class ApiResponse {
     private boolean success;

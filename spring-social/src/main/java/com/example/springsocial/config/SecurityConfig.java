@@ -5,6 +5,7 @@ import com.example.springsocial.security.oauth2.CustomOAuth2UserService;
 import com.example.springsocial.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.example.springsocial.security.oauth2.OAuth2AuthenticationFailureHandler;
 import com.example.springsocial.security.oauth2.OAuth2AuthenticationSuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         jsr250Enabled = true,
         prePostEnabled = true
 )
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
