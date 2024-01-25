@@ -1,6 +1,7 @@
 package com.example.springsocial.security;
 
 import com.example.springsocial.model.users.User;
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,10 +13,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@Data
 public class UserPrincipal implements OAuth2User, UserDetails {
-    @Getter
     private Long id;
-    @Getter
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
@@ -31,7 +31,6 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     public static UserPrincipal create(User user) {
         List<GrantedAuthority> authorities = Collections.
                 singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-
         return new UserPrincipal(
                 user.getId(),
                 user.getEmail(),

@@ -43,9 +43,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         if(StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
-        if (!oAuth2UserInfo.getAttributes().get("hd").toString().equals("hvnh.edu.vn")) {
-            throw new OAuth2AuthenticationProcessingException("Email not belong to organization!");
+        if (oAuth2UserInfo.getAttributes().get("hd") == null) {
+            throw new OAuth2AuthenticationProcessingException("Email not belong to any organization!");
+        } else if (!oAuth2UserInfo.getAttributes().get("hd").equals("hvnh.edu.vn")) {
+            throw new OAuth2AuthenticationProcessingException("Email not belong to BAV organization!");
         }
+
 
         Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
         User user;

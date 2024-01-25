@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClassUserRepository extends JpaRepository<ClassUser, ClassUserPK> {
+    void deleteAllByClassId(Long classId);
+    boolean existsByClassIdAndUserId(Long classId, Long userId);
 }

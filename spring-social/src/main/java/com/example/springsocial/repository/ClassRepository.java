@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface ClassRepository extends JpaRepository<Classes, Long> {
     Optional<Classes> findByClassIdAndOwnerId(Long classId, Long ownerId);
+    Optional<Classes> findByClassCode(String classCode);
 }

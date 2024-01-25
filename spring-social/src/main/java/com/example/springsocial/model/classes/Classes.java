@@ -1,11 +1,14 @@
 package com.example.springsocial.model.classes;
 
+import com.example.springsocial.model.class_user.ClassUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,4 +32,8 @@ public class Classes {
     @Basic
     @Column(name = "created_date")
     private Date createdDate = new Date();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "class_id")
+    private List<ClassUser> classUsers;
 }
