@@ -12,7 +12,10 @@ import com.example.springsocial.service.ClassUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,19 +31,20 @@ import java.util.Optional;
 public class ClassServiceImpl implements ClassService {
     private final ClassUserService classUserService;
     private final ClassRepository classRepository;
+    private final ModelMapper modelMapper;
 
     @Override
-    public List<ClassDTO> findAll() {
-        List<Classes> classList = classRepository.findAll();
-        List<ClassDTO> classDTOS = new ArrayList<>();
-        classList.forEach(result -> {
-            ClassDTO classDTO = new ClassDTO();
-            BeanUtils.copyProperties(result,classDTO);
-            classDTOS.add(classDTO);
-        });
-        return classDTOS;
+    public Page<ClassDTO> findAll(Pageable pageable) {
+         return classRepository.findAll(pageable)
+                 .map(classes -> modelMapper.map(classes,ClassDTO.class));
     }
 
+    @Override
+    public Page<ClassDTO> findByOwnerId(Long userId, Pageable pageable) {
+        return classRepository.findAllByOwnerId(userId,pageable)
+                .map(classes -> modelMapper.map(classes,ClassDTO.class));
+
+    }
     @Override
     public ClassDTO create(ClassDTO classDTO) {
         log.debug("Save new class {}",classDTO);
@@ -61,7 +65,7 @@ public class ClassServiceImpl implements ClassService {
         if(classesOptional.isPresent()){
             try {
                 classUserService.deleteStudentFromClass(classId);
-                classRepository.deleteById(classesOptional.get().getClassId());
+                classRepository.delete(classesOptional.get());
             } catch (Exception e) {
                 throw new ResourceNotFoundException("Class","class_id",classId);
             }

@@ -7,6 +7,8 @@ import com.example.springsocial.payload.class_payload.JoinClassDTO;
 import com.example.springsocial.payload.class_user_payload.ApproveClassUserDTO;
 import com.example.springsocial.service.ClassService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,10 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClassController {
     private final ClassService classService;
-
     @GetMapping("/getAll")
-    public Response<List<ClassDTO>> findAll() throws Exception {
-        return Response.ok(classService.findAll());
+    public Response<List<ClassDTO>> findAll(@RequestParam(value = "page",defaultValue = "0") Integer page,
+                                            @RequestParam(value = "size", defaultValue = "10") Integer size) throws Exception {
+        Pageable pageable = PageRequest.of(page, size);
+        return Response.ok(classService.findAll(pageable));
     }
 
     @PostMapping("/create")
@@ -35,6 +38,14 @@ public class ClassController {
             return Response.deleted().setMessage("api.class.delete.success","Delete record successfully!");
         }
         return Response.bad().setMessage("api.class.delete.fail","Fail delete record!");
+    }
+
+    @GetMapping("/getClassByUserId/{userId}")
+    public Response<List<ClassDTO>> getClassByOwnerId(@PathVariable(value = "userId", required = false) Long userId,
+                                                      @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                      @RequestParam(value = "size", defaultValue = "10") Integer size) throws Exception {
+        Pageable pageable = PageRequest.of(page, size);
+        return Response.ok(classService.findByOwnerId(userId,pageable));
     }
 
     @PostMapping("/join-class")

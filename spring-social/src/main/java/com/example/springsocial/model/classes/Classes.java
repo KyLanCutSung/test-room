@@ -33,7 +33,7 @@ public class Classes {
     @Column(name = "created_date")
     private Date createdDate = new Date();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "class_id")
     private List<ClassUser> classUsers;
 }
