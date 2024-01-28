@@ -1,8 +1,11 @@
 package com.example.springsocial.security.oauth2;
 
 import com.example.springsocial.exception.OAuth2AuthenticationProcessingException;
+import com.example.springsocial.model.roles.RoleProvider;
+import com.example.springsocial.model.roles.Roles;
 import com.example.springsocial.model.users.AuthProvider;
 import com.example.springsocial.model.users.User;
+import com.example.springsocial.repository.RolesRepository;
 import com.example.springsocial.repository.UserRepository;
 import com.example.springsocial.security.UserPrincipal;
 import com.example.springsocial.security.oauth2.user.OAuth2UserInfo;
@@ -17,12 +20,15 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private final UserRepository userRepository;
+    private final RolesRepository rolesRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -75,6 +81,17 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
         user.setEmailVerified((Boolean) oAuth2UserInfo.getAttributes().get("email_verified"));
+        List<Roles> roles = new ArrayList<>();
+        if (!verifiedEmail(oAuth2UserInfo.getEmail())){
+            Roles result = rolesRepository.findByRoleName(RoleProvider.ROLE_TEACHER);
+            roles.add(result);
+            user.setRoles(roles);
+        } else {
+            Roles result = rolesRepository.findByRoleName(RoleProvider.ROLE_STUDENT);
+            roles.add(result);
+            user.setStudentCourse(identifyStudentCourse(oAuth2UserInfo.getEmail()));
+            user.setRoles(roles);
+        }
         return userRepository.save(user);
     }
 
@@ -82,6 +99,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         existingUser.setName(oAuth2UserInfo.getName());
         existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
         return userRepository.save(existingUser);
+    }
+
+    private boolean verifiedEmail(String email) {
+        char str = email.charAt(0);
+        return Character.isDigit(str);
+    }
+
+    private String identifyStudentCourse(String email) {
+        String course = "K";
+        return course + email.substring(0,2);
     }
 
 }
