@@ -131,3 +131,11 @@ create table if not exists exam_quiz
         foreign key (answer_id) references quiz_answer (answer_id)
 );
 
+create table if not exists roles
+(
+    role_id int auto_increment
+        primary key,
+    role_name varchar(20) not null
+);
+
+

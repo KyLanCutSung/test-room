@@ -1,13 +1,25 @@
 package com.example.springsocial.controller;
 
+import com.example.springsocial.payload.Response;
+import com.example.springsocial.payload.document_payload.DocumentDTO;
 import com.example.springsocial.service.DocumentService;
+import com.example.springsocial.service.ExcelService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/document")
 @RequiredArgsConstructor
 public class DocumentController {
     private final DocumentService documentService;
+    private final ExcelService excelService;
+
+    @PostMapping(value = "/upload", consumes = { "multipart/form-data","application/json" })
+    public Response<DocumentDTO> upload(@RequestPart MultipartFile file,
+                                        @RequestPart DocumentDTO documentDTO) throws IOException {
+        return Response.ok(documentService.saveDocumentAndQuiz(file, documentDTO));
+    }
 }

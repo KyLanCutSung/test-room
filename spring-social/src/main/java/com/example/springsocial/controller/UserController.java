@@ -21,7 +21,7 @@ public class UserController {
     private final CustomUserDetailsService customUserDetailsService;
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('STUDENT','TEACHER','ADMIN')")
     public UserDTO getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return customUserDetailsService.findById(userPrincipal.getId());
     }

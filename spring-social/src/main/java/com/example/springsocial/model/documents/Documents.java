@@ -1,11 +1,14 @@
 package com.example.springsocial.model.documents;
 
+import com.example.springsocial.model.quiz.Quiz;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,5 +29,9 @@ public class Documents {
     @Column(name = "owner_id")
     private Long ownerId;
     @Column(name = "created_date")
-    private Timestamp createdDate;
+    private Date createdDate;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "document_id")
+    private List<Quiz> quizzes;
 }

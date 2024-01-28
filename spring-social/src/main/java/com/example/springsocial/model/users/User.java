@@ -1,10 +1,13 @@
 package com.example.springsocial.model.users;
+import com.example.springsocial.model.roles.Roles;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -29,4 +32,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private AuthProvider provider;
     private String providerId;
+    private String studentCourse;
+    @ManyToMany(fetch = FetchType.EAGER)
+    List<Roles> roles = new ArrayList<>();
 }
