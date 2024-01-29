@@ -1,7 +1,7 @@
 package com.example.springsocial.controller;
 
-import com.example.springsocial.model.classes.Classes;
 import com.example.springsocial.payload.Response;
+import com.example.springsocial.payload.class_document_payload.StatusDocumentDTO;
 import com.example.springsocial.payload.class_payload.ClassDTO;
 import com.example.springsocial.payload.class_payload.JoinClassDTO;
 import com.example.springsocial.payload.class_user_payload.ApproveClassUserDTO;
@@ -61,5 +61,17 @@ public class ClassController {
     @PreAuthorize("hasAnyRole('TEACHER')")
     public void classApproval(@RequestBody ApproveClassUserDTO approveClassUserDTO) throws Exception {
         classService.classApproval(approveClassUserDTO);
+    }
+
+    @PostMapping("/active-document")
+    @PreAuthorize("hasRole('TEACHER')")
+    public Response<Object> activeDocumentForClass(@RequestBody StatusDocumentDTO statusDocumentDTO) {
+        return Response.created(classService.activeDocument(statusDocumentDTO));
+    }
+
+    @PostMapping("/deactivate-document")
+    @PreAuthorize("hasRole('TEACHER')")
+    public void deactivateDocument(@RequestBody StatusDocumentDTO statusDocumentDTO) {
+        classService.deactivateDocument(statusDocumentDTO);
     }
 }

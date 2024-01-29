@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface ClassRepository extends JpaRepository<Classes, Long> {
     Optional<Classes> findByClassIdAndOwnerId(Long classId, Long ownerId);
     Optional<Classes> findByClassCode(String classCode);
-
     Page<Classes> findAllByOwnerId(Long ownerId, Pageable pageable);
+    boolean existsByOwnerId(Long ownerId);
 }

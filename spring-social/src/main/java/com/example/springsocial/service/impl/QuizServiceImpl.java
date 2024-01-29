@@ -15,18 +15,4 @@ import java.util.List;
 public class QuizServiceImpl implements QuizService {
     private final QuizRepository quizRepository;
 
-    @Override
-    public List<Quiz> saveAll(List<Quiz> quizzes) {
-        return quizRepository.saveAll(quizzes);
-    }
-
-    @Override
-    public Quiz save(Quiz quiz) {
-        return quizRepository.save(quiz);
-    }
-
-    @Override
-    public List<Quiz> findAll() {
-        return quizRepository.findAll();
-    }
 }
