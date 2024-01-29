@@ -59,3 +59,10 @@ values ('Tài liệu');
 
 select *
 from exam_type;
+
+select *
+from quiz_answer;
+
+select * from roles;
+
+select * from documents

@@ -9,6 +9,7 @@ import com.example.springsocial.service.ClassService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ClassController {
     private final ClassService classService;
     @GetMapping("/getAll")
+    @PreAuthorize("hasAnyRole('TEACHER','ADMIN')")
     public Response<List<ClassDTO>> findAll(@RequestParam(value = "page",defaultValue = "0") Integer page,
                                             @RequestParam(value = "size", defaultValue = "10") Integer size) throws Exception {
         Pageable pageable = PageRequest.of(page, size);
@@ -26,11 +28,13 @@ public class ClassController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('TEACHER','ADMIN')")
     public Response<ClassDTO> create(@RequestBody ClassDTO classDTO) throws Exception {
         return Response.created(classService.create(classDTO));
     }
 
     @DeleteMapping("/delete/{classId}")
+    @PreAuthorize("hasAnyRole('TEACHER','ADMIN')")
     public Response<Object> deleteClass(@PathVariable(value = "classId", required = false) Long classId,
                                         @RequestParam(value = "userId", required = false) Long userId) throws Exception {
         boolean result = classService.delete(classId,userId);
@@ -54,6 +58,7 @@ public class ClassController {
     }
 
     @PostMapping("/class-approval")
+    @PreAuthorize("hasAnyRole('TEACHER')")
     public void classApproval(@RequestBody ApproveClassUserDTO approveClassUserDTO) throws Exception {
         classService.classApproval(approveClassUserDTO);
     }

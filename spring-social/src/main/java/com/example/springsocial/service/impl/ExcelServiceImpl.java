@@ -3,6 +3,8 @@ package com.example.springsocial.service.impl;
 import com.example.springsocial.model.documents.Documents;
 import com.example.springsocial.model.quiz.Quiz;
 import com.example.springsocial.model.quiz_answer.QuizAnswer;
+import com.example.springsocial.repository.DocumentRepository;
+import com.example.springsocial.service.DocumentService;
 import com.example.springsocial.service.ExcelService;
 import com.example.springsocial.service.QuizAnswerService;
 import com.example.springsocial.service.QuizService;
@@ -23,6 +25,7 @@ import java.util.List;
 public class ExcelServiceImpl implements ExcelService {
     private final QuizService quizService;
     private final QuizAnswerService quizAnswerService;
+    private final DocumentRepository documentRepository;
 
     @Override
     public boolean compareMergeCell(InputStream inputStream) throws IOException {
@@ -35,19 +38,19 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     @Override
-    public void excelToQuizzes(InputStream inputStream, Long documentId) throws IOException {
+    public void excelToQuizzes(InputStream inputStream, Documents documents) throws IOException {
         try {
             Workbook workbook = new XSSFWorkbook(inputStream);
             Sheet sheet = workbook.getSheetAt(0);
             //Thiết lập phạm vi cột và dòng đẩy dữ liệu vào quiz
-            importDataToQuiz(sheet,documentId);
+            importDataToQuiz(sheet,documents);
             workbook.close();
         } catch (IOException e) {
             throw new RuntimeException("Fail to parse Excel file: " + e.getMessage());
         }
     }
 
-    private void importDataToQuiz(Sheet sheet, Long documentId) {
+    private void importDataToQuiz(Sheet sheet, Documents documents) {
         Iterator<Row> rows = sheet.iterator();
         List<Quiz> quizzes = new ArrayList<>();
         int rowNumber = 1;
@@ -58,7 +61,6 @@ public class ExcelServiceImpl implements ExcelService {
                 continue;
             }
             Quiz quiz = new Quiz();
-            quiz.setDocumentId(documentId);
             quiz.setQuestion(row.getCell(0).getStringCellValue());
 
             List<QuizAnswer> quizAnswers = new ArrayList<>();
@@ -73,7 +75,10 @@ public class ExcelServiceImpl implements ExcelService {
                 quizzes.add(quiz);
             }
         }
-        quizService.saveAll(quizzes);
+//        quizService.saveAll(quizzes);
+        documents.setQuizzes(quizzes);
+        documentRepository.save(documents);
+
     }
 
     private boolean areMergedCellsInSameRowEqual(Cell cellB1, Cell cellF1, Sheet sheet) {

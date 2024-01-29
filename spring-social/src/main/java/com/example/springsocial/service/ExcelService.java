@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface ExcelService {
     boolean compareMergeCell(InputStream inputStream) throws IOException;
-    void excelToQuizzes(InputStream inputStream, Long documentId) throws IOException;
+    void excelToQuizzes(InputStream inputStream, Documents document) throws IOException;
 }
