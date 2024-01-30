@@ -23,8 +23,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ExcelServiceImpl implements ExcelService {
-    private final QuizService quizService;
-    private final QuizAnswerService quizAnswerService;
     private final DocumentRepository documentRepository;
 
     @Override
@@ -42,7 +40,6 @@ public class ExcelServiceImpl implements ExcelService {
         try {
             Workbook workbook = new XSSFWorkbook(inputStream);
             Sheet sheet = workbook.getSheetAt(0);
-            //Thiết lập phạm vi cột và dòng đẩy dữ liệu vào quiz
             importDataToQuiz(sheet,documents);
             workbook.close();
         } catch (IOException e) {
@@ -75,7 +72,6 @@ public class ExcelServiceImpl implements ExcelService {
                 quizzes.add(quiz);
             }
         }
-//        quizService.saveAll(quizzes);
         documents.setQuizzes(quizzes);
         documentRepository.save(documents);
 

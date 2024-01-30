@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface DocumentService {
-    DocumentDTO saveDocumentAndQuiz(MultipartFile file, DocumentDTO documentDTO) throws IOException;
-    void save(Documents documents);
+    DocumentDTO saveDocument(MultipartFile file, DocumentDTO documentDTO) throws IOException;
     MultiChoicesDocumentDTO findMultiChoicesDocumentById(Long documentId);
+    DocumentDTO saveDocument(DocumentDTO documentDTO);
 }

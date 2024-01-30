@@ -1,7 +1,8 @@
 package com.example.springsocial.controller;
 
 import com.example.springsocial.payload.Response;
-import com.example.springsocial.payload.class_document_payload.StatusDocumentDTO;
+import com.example.springsocial.payload.class_document_payload.ClassDocumentDTO;
+import com.example.springsocial.payload.class_payload.ActiveDocumentInClassDTO;
 import com.example.springsocial.payload.class_payload.ClassDTO;
 import com.example.springsocial.payload.class_payload.JoinClassDTO;
 import com.example.springsocial.payload.class_user_payload.ApproveClassUserDTO;
@@ -65,13 +66,18 @@ public class ClassController {
 
     @PostMapping("/active-document")
     @PreAuthorize("hasRole('TEACHER')")
-    public Response<Object> activeDocumentForClass(@RequestBody StatusDocumentDTO statusDocumentDTO) {
-        return Response.created(classService.activeDocument(statusDocumentDTO));
+    public void activeDocumentForClass(@RequestBody List<ClassDocumentDTO> classDocumentDTOS) {
+        classService.activeDocument(classDocumentDTOS);
     }
 
     @PostMapping("/deactivate-document")
     @PreAuthorize("hasRole('TEACHER')")
-    public void deactivateDocument(@RequestBody StatusDocumentDTO statusDocumentDTO) {
-        classService.deactivateDocument(statusDocumentDTO);
+    public void deactivateDocument(@RequestBody List<ClassDocumentDTO> classDocumentDTOS) {
+        classService.deactivateDocument(classDocumentDTOS);
+    }
+
+    @GetMapping("/documents/{classId}")
+    public Response<List<ActiveDocumentInClassDTO>> findActiveDocumentInClass(@PathVariable("classId") Long classId) {
+        return Response.ok(classService.findActiveDocumentInClass(classId));
     }
 }

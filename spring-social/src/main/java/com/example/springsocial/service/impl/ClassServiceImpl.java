@@ -4,10 +4,12 @@ import com.example.springsocial.exception.BadRequestException;
 import com.example.springsocial.exception.ResourceNotFoundException;
 import com.example.springsocial.model.classes.Classes;
 import com.example.springsocial.model.classes_documents.ClassesDocuments;
-import com.example.springsocial.payload.class_document_payload.StatusDocumentDTO;
+import com.example.springsocial.payload.class_document_payload.ClassDocumentDTO;
+import com.example.springsocial.payload.class_payload.ActiveDocumentInClassDTO;
 import com.example.springsocial.payload.class_payload.ClassDTO;
 import com.example.springsocial.payload.class_payload.JoinClassDTO;
 import com.example.springsocial.payload.class_user_payload.ApproveClassUserDTO;
+import com.example.springsocial.repository.ClassDocumentCustomRepository;
 import com.example.springsocial.repository.ClassDocumentRepository;
 import com.example.springsocial.repository.ClassRepository;
 import com.example.springsocial.repository.DocumentRepository;
@@ -37,8 +39,7 @@ public class ClassServiceImpl implements ClassService {
     private final ClassRepository classRepository;
     private final ModelMapper modelMapper;
     private final ClassDocumentRepository classDocumentRepository;
-    private final DocumentRepository documentRepository;
-
+    private final ClassDocumentCustomRepository classDocumentCustomRepository;
     @Override
     public Page<ClassDTO> findAll(Pageable pageable) {
          return classRepository.findAll(pageable)
@@ -103,34 +104,31 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public boolean activeDocument(StatusDocumentDTO statusDocumentDTO) {
-        boolean owner = classRepository.existsByOwnerId(statusDocumentDTO.getOwnerId());
-        if (owner){
+    public void activeDocument(List<ClassDocumentDTO> classDocumentDTOS) {
             List<ClassesDocuments> classesDocuments = new ArrayList<>();
-            statusDocumentDTO.getClassDocumentDTOS().forEach(classDocumentDTO -> {
+            classDocumentDTOS.forEach(classDocumentDTO -> {
                 ClassesDocuments classDocument = new ClassesDocuments();
                 BeanUtils.copyProperties(classDocumentDTO,classDocument);
                 classDocument.setIsActive(true);
                 classesDocuments.add(classDocument);
             });
             classDocumentRepository.saveAll(classesDocuments);
-            return true;
-        }
-        return false;
     }
 
     @Override
-    public void deactivateDocument(StatusDocumentDTO statusDocumentDTO) {
-        boolean owner = classRepository.existsByOwnerId(statusDocumentDTO.getOwnerId());
-        if (owner) {
+    public void deactivateDocument(List<ClassDocumentDTO> classDocumentDTOS) {
             List<ClassesDocuments> classesDocuments = new ArrayList<>();
-            statusDocumentDTO.getClassDocumentDTOS().forEach(classDocumentDTO -> {
+            classDocumentDTOS.forEach(classDocumentDTO -> {
                 ClassesDocuments classDocument = new ClassesDocuments();
                 BeanUtils.copyProperties(classDocumentDTO,classDocument);
                 classDocument.setIsActive(false);
                 classesDocuments.add(classDocument);
             });
             classDocumentRepository.saveAll(classesDocuments);
-        }
+    }
+
+    @Override
+    public List<ActiveDocumentInClassDTO> findActiveDocumentInClass(Long classId) {
+        return classDocumentCustomRepository.findActiveDocumentInClass(classId);
     }
 }

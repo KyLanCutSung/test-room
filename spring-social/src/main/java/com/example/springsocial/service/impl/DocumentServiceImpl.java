@@ -32,22 +32,23 @@ public class DocumentServiceImpl implements DocumentService {
     private final ExcelService excelService;
     private final ModelMapper modelMapper;
 
-
     @Override
-    public DocumentDTO saveDocumentAndQuiz(MultipartFile file, DocumentDTO documentDTO) throws IOException {
+    public DocumentDTO saveDocument(MultipartFile file, DocumentDTO documentDTO) throws IOException {
         Documents documents = modelMapper.map(documentDTO, Documents.class);
-        if (excelService.compareMergeCell(file.getInputStream())){
-            documents.setCreatedDate(Date.from(Instant.now()));
-            excelService.excelToQuizzes(file.getInputStream(),documents);
-        } else {
-            throw new RuntimeException("Excel doesn't right format!");
-        }
-        return modelMapper.map(documents, DocumentDTO.class);
+            if (excelService.compareMergeCell(file.getInputStream())){
+                documents.setCreatedDate(Date.from(Instant.now()));
+                excelService.excelToQuizzes(file.getInputStream(),documents);
+            } else {
+                throw new RuntimeException("Excel doesn't right format!");
+            }
+            return modelMapper.map(documents, DocumentDTO.class);
     }
 
     @Override
-    public void save(Documents documents){
-        documentRepository.save(documents);
+    public DocumentDTO saveDocument(DocumentDTO documentDTO) {
+        Documents documents = modelMapper.map(documentDTO, Documents.class);
+        documents = documentRepository.save(documents);
+        return modelMapper.map(documents,DocumentDTO.class);
     }
 
     @Override

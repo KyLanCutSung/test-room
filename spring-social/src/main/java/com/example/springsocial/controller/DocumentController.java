@@ -17,13 +17,18 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class DocumentController {
     private final DocumentService documentService;
-    private final ExcelService excelService;
 
-    @PostMapping(value = "/upload", consumes = { "multipart/form-data","application/json" })
+    @PostMapping(value = "/upload-file", consumes = { "multipart/form-data","application/json" })
     @PreAuthorize("hasRole('TEACHER')")
     public Response<DocumentDTO> upload(@RequestPart MultipartFile file,
                                         @RequestPart DocumentDTO documentDTO) throws IOException {
-        return Response.ok(documentService.saveDocumentAndQuiz(file, documentDTO));
+        return Response.ok(documentService.saveDocument(file, documentDTO));
+    }
+
+    @PostMapping("/upload-document")
+    @PreAuthorize("hasRole('TEACHER')")
+    public Response<DocumentDTO> upload(@RequestBody DocumentDTO documentDTO) {
+        return Response.ok(documentService.saveDocument(documentDTO));
     }
 
     @GetMapping("/get/multiple-choices")

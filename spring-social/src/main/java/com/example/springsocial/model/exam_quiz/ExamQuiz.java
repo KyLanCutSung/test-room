@@ -20,7 +20,5 @@ public class ExamQuiz {
     private Long examId;
     @Column(name = "answer_id")
     private Long answerId;
-    @Column(name = "answer")
-    private Integer answer;
 
 }
