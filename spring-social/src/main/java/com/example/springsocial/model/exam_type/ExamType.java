@@ -19,7 +19,4 @@ public class ExamType {
     @Basic
     @Column(name = "exam_type")
     private String examType;
-    @Basic
-    @Column(name = "submission_time")
-    private Integer submissionTime;
 }

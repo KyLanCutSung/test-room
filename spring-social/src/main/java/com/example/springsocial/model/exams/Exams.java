@@ -21,18 +21,12 @@ public class Exams {
     @Column(name = "class_id")
     private Long classId;
     @Basic
-    @Column(name = "user_id")
+    @Column(name = "owner_id")
     private Long userId;
-    @Basic
-    @Column(name = "started_date")
-    private Timestamp startedDate;
-    @Basic
-    @Column(name = "ended_date")
-    private Timestamp endedDate;
     @Basic
     @Column(name = "exam_type_id")
     private Integer examTypeId;
     @Basic
     @Column(name = "status")
-    private String status;
+    private boolean status;
 }
