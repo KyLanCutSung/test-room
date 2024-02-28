@@ -22,11 +22,11 @@ public class Exams {
     private Long classId;
     @Basic
     @Column(name = "owner_id")
-    private Long userId;
+    private Long ownerId;
     @Basic
     @Column(name = "exam_type_id")
     private Integer examTypeId;
     @Basic
     @Column(name = "status")
-    private boolean status;
+    private Boolean status;
 }

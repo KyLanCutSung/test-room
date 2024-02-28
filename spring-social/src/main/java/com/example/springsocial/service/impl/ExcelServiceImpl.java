@@ -65,7 +65,7 @@ public class ExcelServiceImpl implements ExcelService {
                 if (row.getCell(i) != null) {
                     QuizAnswer quizAnswer = new QuizAnswer();;
                     quizAnswer.setAnswer(row.getCell(i).getStringCellValue());
-                    quizAnswer.setIsCorrected(row.getCell(i+5).getBooleanCellValue());
+                    quizAnswer.setIsCorrected(row.getCell(i + 5).getBooleanCellValue());
                     quizAnswers.add(quizAnswer);
                 }
                 quiz.setQuizAnswers(quizAnswers);

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "exam_result", schema = "web_room")
@@ -16,17 +17,17 @@ public class ExamResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "exam_result_id")
-    private long examResultId;
+    private Long examResultId;
     @Basic
     @Column(name = "exam_id")
-    private long examId;
+    private Long examId;
     @Basic
     @Column(name = "user_id")
-    private long userId;
+    private Long userId;
     @Basic
     @Column(name = "started_time")
-    private Timestamp startedTime;
+    private Date startedTime;
     @Basic
     @Column(name = "ended_time")
-    private Timestamp endedTime;
+    private Date endedTime;
 }
