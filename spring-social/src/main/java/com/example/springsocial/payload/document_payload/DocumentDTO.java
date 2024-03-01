@@ -9,4 +9,5 @@ public class DocumentDTO {
     private String documentUrl;
     private Integer documentTypeId;
     private Long ownerId;
+    private Long totalQuestion;
 }

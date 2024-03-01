@@ -32,6 +32,7 @@ public class DocumentController {
     }
 
     @GetMapping("/get/multiple-choices")
+    @PreAuthorize("hasRole('TEACHER')")
     public Response<MultiChoicesDocumentDTO> getMultipleChoicesDocument(@RequestParam("documentId") Long documentId) {
         return Response.ok(documentService.findMultiChoicesDocumentById(documentId));
     }

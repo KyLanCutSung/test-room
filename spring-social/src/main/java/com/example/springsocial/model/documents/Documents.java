@@ -30,7 +30,6 @@ public class Documents {
     private Long ownerId;
     @Column(name = "created_date")
     private Date createdDate;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "document_id")
     private List<Quiz> quizzes;

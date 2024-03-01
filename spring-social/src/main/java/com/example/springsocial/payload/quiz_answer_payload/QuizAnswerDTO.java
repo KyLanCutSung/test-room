@@ -6,4 +6,5 @@ import lombok.Data;
 public class QuizAnswerDTO {
     private Long answerId;
     private String answer;
+    private Boolean isCorrected;
 }
