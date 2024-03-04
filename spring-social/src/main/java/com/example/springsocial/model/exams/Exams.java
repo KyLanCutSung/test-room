@@ -34,9 +34,6 @@ public class Exams implements Serializable {
     @Column(name = "status")
     private Boolean status;
 
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "exam_id")
-//    private List<DocumentExam> documentExams;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "document_exam",
             joinColumns = @JoinColumn(name = "exam_id"),

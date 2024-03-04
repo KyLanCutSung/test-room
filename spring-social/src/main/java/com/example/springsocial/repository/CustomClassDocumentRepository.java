@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class ClassDocumentCustomRepository {
+public class CustomClassDocumentRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public List<ActiveDocumentInClassDTO> findActiveDocumentInClass(Long classId) {

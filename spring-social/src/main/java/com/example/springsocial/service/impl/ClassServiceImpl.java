@@ -9,10 +9,9 @@ import com.example.springsocial.payload.class_payload.ActiveDocumentInClassDTO;
 import com.example.springsocial.payload.class_payload.ClassDTO;
 import com.example.springsocial.payload.class_payload.JoinClassDTO;
 import com.example.springsocial.payload.class_user_payload.ApproveClassUserDTO;
-import com.example.springsocial.repository.ClassDocumentCustomRepository;
+import com.example.springsocial.repository.CustomClassDocumentRepository;
 import com.example.springsocial.repository.ClassDocumentRepository;
 import com.example.springsocial.repository.ClassRepository;
-import com.example.springsocial.repository.DocumentRepository;
 import com.example.springsocial.service.ClassService;
 import com.example.springsocial.service.ClassUserService;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,7 @@ public class ClassServiceImpl implements ClassService {
     private final ClassRepository classRepository;
     private final ModelMapper modelMapper;
     private final ClassDocumentRepository classDocumentRepository;
-    private final ClassDocumentCustomRepository classDocumentCustomRepository;
+    private final CustomClassDocumentRepository customClassDocumentRepository;
     @Override
     public Page<ClassDTO> findAll(Pageable pageable) {
          return classRepository.findAll(pageable)
@@ -129,6 +128,6 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     public List<ActiveDocumentInClassDTO> findActiveDocumentInClass(Long classId) {
-        return classDocumentCustomRepository.findActiveDocumentInClass(classId);
+        return customClassDocumentRepository.findActiveDocumentInClass(classId);
     }
 }

@@ -7,7 +7,8 @@ import java.util.List;
 
 @Data
 public class QuizDTO {
-    private long quizId;
+    private Long documentId;
+    private Long quizId;
     private String question;
     private List<QuizAnswerDTO> quizAnswerDTOS;
 }
