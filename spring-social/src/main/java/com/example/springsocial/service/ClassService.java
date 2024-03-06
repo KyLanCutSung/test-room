@@ -1,5 +1,6 @@
 package com.example.springsocial.service;
 
+import com.example.springsocial.payload.auth_payload.ApiResponse;
 import com.example.springsocial.payload.class_document_payload.ClassDocumentDTO;
 import com.example.springsocial.payload.class_payload.ActiveDocumentInClassDTO;
 import com.example.springsocial.payload.class_payload.ClassDTO;
@@ -13,11 +14,11 @@ import java.util.List;
 public interface ClassService {
     Page<ClassDTO> findAll(Pageable pageable) throws Exception;
     ClassDTO create(ClassDTO classDTO) throws Exception;
-    boolean delete(Long classId, Long userId) throws Exception;
-    void joinClass(JoinClassDTO joinClassDTO) throws Exception;
-    void classApproval(ApproveClassUserDTO dto) throws Exception;
+    ApiResponse delete(Long classId, Long userId) throws Exception;
+    ApiResponse joinClass(JoinClassDTO joinClassDTO) throws Exception;
+    ApiResponse classApproval(ApproveClassUserDTO dto) throws Exception;
     Page<ClassDTO> findByOwnerId(Long userId, Pageable pageable);
-    void activeDocument(List<ClassDocumentDTO> classDocumentDTOS);
-    void deactivateDocument(List<ClassDocumentDTO> classDocumentDTOS);
+    ApiResponse activeDocument(List<ClassDocumentDTO> classDocumentDTOS);
+    ApiResponse deactivateDocument(List<ClassDocumentDTO> classDocumentDTOS);
     List<ActiveDocumentInClassDTO> findActiveDocumentInClass(Long classId);
 }

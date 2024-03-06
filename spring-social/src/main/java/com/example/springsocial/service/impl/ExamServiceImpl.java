@@ -7,6 +7,7 @@ import com.example.springsocial.model.documents.Documents;
 import com.example.springsocial.model.exams.Exams;
 import com.example.springsocial.model.quiz.Quiz;
 import com.example.springsocial.model.users.User;
+import com.example.springsocial.payload.auth_payload.ApiResponse;
 import com.example.springsocial.payload.exam_payload.ExamDTO;
 import com.example.springsocial.payload.exam_result_payload.ExamResultDTO;
 import com.example.springsocial.payload.quiz_answer_payload.QuizAnswerDTO;
@@ -35,7 +36,7 @@ public class ExamServiceImpl implements ExamService {
     private final QuizRepository quizRepository;
 
     @Override
-    public void createExam(ExamDTO dto) {
+    public ApiResponse createExam(ExamDTO dto) {
         Optional<User> user = userRepository.findById(dto.getOwnerId());
         Optional<Classes> classes = classRepository.findById(dto.getClassId());
         if (user.isPresent() && classes.isPresent()) {
@@ -61,11 +62,12 @@ public class ExamServiceImpl implements ExamService {
                 }
             }
             documentExamRepository.saveAll(documentExams);
+            return new ApiResponse(true, "Create exam successfully!");
         } else throw new ResourceNotFoundException("user", "id", dto.getOwnerId());
     }
 
     @Override
-    public void changeStatusExam(ExamDTO dto) {
+    public ApiResponse changeStatusExam(ExamDTO dto) {
         Optional<Exams> exam = examRepository.findByExamIdAndClassIdAndOwnerId(dto.getExamId(), dto.getClassId(), dto.getOwnerId());
         if (exam.isPresent()) {
             Exams exams = exam.get();
@@ -73,6 +75,7 @@ public class ExamServiceImpl implements ExamService {
             exams.setClassId(dto.getClassId());
             exams.setOwnerId(dto.getOwnerId());
             examRepository.save(exams);
+            return new ApiResponse(true,"Status of exam had change!");
         } else throw new ResourceNotFoundException("exam", "id", dto.getExamId());
     }
 
@@ -109,9 +112,7 @@ public class ExamServiceImpl implements ExamService {
     private List<QuizDTO> getQuizDTOS(List<DocumentExam> documentExams) {
         List<Quiz> quizzesRandom = customQuizRepository.getQuizRandomWithAvailableParameters(documentExams);
         List<Long> quizIdTotal = new ArrayList<>();
-        quizzesRandom.forEach(quiz -> {
-            quizIdTotal.add(quiz.getQuizId());
-        });
+        quizzesRandom.forEach(quiz -> quizIdTotal.add(quiz.getQuizId()));
         List<Quiz> quizzes = quizRepository.findAllById(quizIdTotal);
         List<QuizDTO> quizDTOS = new ArrayList<>();
         quizzes.forEach(quiz -> {

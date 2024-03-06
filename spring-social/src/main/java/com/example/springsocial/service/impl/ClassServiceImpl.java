@@ -4,6 +4,7 @@ import com.example.springsocial.exception.BadRequestException;
 import com.example.springsocial.exception.ResourceNotFoundException;
 import com.example.springsocial.model.classes.Classes;
 import com.example.springsocial.model.classes_documents.ClassesDocuments;
+import com.example.springsocial.payload.auth_payload.ApiResponse;
 import com.example.springsocial.payload.class_document_payload.ClassDocumentDTO;
 import com.example.springsocial.payload.class_payload.ActiveDocumentInClassDTO;
 import com.example.springsocial.payload.class_payload.ClassDTO;
@@ -65,45 +66,39 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     @Transactional
-    public boolean delete(Long classId, Long userId) {
+    public ApiResponse delete(Long classId, Long userId) {
         log.debug("Delete by classId and userId Class {},{}",classId, userId);
         Optional<Classes> classesOptional = classRepository.findByClassIdAndOwnerId(classId,userId);
-        if(classesOptional.isPresent()){
-            try {
+        if(classesOptional.isPresent()) {
                 classUserService.deleteStudentFromClass(classId);
                 classRepository.delete(classesOptional.get());
-            } catch (Exception e) {
-                throw new ResourceNotFoundException("Class","class_id",classId);
+                return new ApiResponse(true, "Delete Complete!");
             }
-            return true;
-        }
-        return false;
+        throw new ResourceNotFoundException("Class", "class_id", classId);
     }
     @Override
-    public void joinClass(JoinClassDTO joinClassDTO) {
+    public ApiResponse joinClass(JoinClassDTO joinClassDTO) {
         Optional<Classes> result = classRepository.findByClassCode(joinClassDTO.getClassCode());
-        result.ifPresent(classes -> {
-            try {
-                classUserService.createClassUserStatus(joinClassDTO.getUserId(), classes.getClassId());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
+        if (result.isPresent()){
+            Classes classes = result.get();
+            classUserService.createClassUserStatus(joinClassDTO.getUserId(), classes.getClassId());
+            return new ApiResponse(true,"Wait for accepted!");
+        }
+        else throw new ResourceNotFoundException("Class","code",joinClassDTO.getClassCode());
     }
 
     @Override
     @Transactional
-    public void classApproval(ApproveClassUserDTO dto) throws Exception {
+    public ApiResponse classApproval(ApproveClassUserDTO dto) throws Exception {
         Optional<Classes> classes = classRepository.findByClassIdAndOwnerId(dto.getClassId(), dto.getOwnerId());
         if (classes.isPresent()) {
             classUserService.acceptStudent(dto);
-        } else {
-            throw new BadRequestException("Cannot approve!");
-        }
+            return new ApiResponse(true,"Complete!");
+        } else throw new BadRequestException("Cannot approve!");
     }
 
     @Override
-    public void activeDocument(List<ClassDocumentDTO> classDocumentDTOS) {
+    public ApiResponse activeDocument(List<ClassDocumentDTO> classDocumentDTOS) {
             List<ClassesDocuments> classesDocuments = new ArrayList<>();
             classDocumentDTOS.forEach(classDocumentDTO -> {
                 ClassesDocuments classDocument = new ClassesDocuments();
@@ -112,10 +107,11 @@ public class ClassServiceImpl implements ClassService {
                 classesDocuments.add(classDocument);
             });
             classDocumentRepository.saveAll(classesDocuments);
+            return new ApiResponse(true, "Complete!");
     }
 
     @Override
-    public void deactivateDocument(List<ClassDocumentDTO> classDocumentDTOS) {
+    public ApiResponse deactivateDocument(List<ClassDocumentDTO> classDocumentDTOS) {
             List<ClassesDocuments> classesDocuments = new ArrayList<>();
             classDocumentDTOS.forEach(classDocumentDTO -> {
                 ClassesDocuments classDocument = new ClassesDocuments();
@@ -124,6 +120,7 @@ public class ClassServiceImpl implements ClassService {
                 classesDocuments.add(classDocument);
             });
             classDocumentRepository.saveAll(classesDocuments);
+        return new ApiResponse(true, "Complete!");
     }
 
     @Override
